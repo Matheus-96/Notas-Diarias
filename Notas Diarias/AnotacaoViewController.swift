@@ -13,13 +13,23 @@ class AnotacaoViewController: UIViewController {
 
     @IBOutlet weak var texto: UITextView!
     var context: NSManagedObjectContext!
+    var anotacao: NSManagedObject!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         //configuracoes inicais
         self.texto.becomeFirstResponder()
-        self.texto.text = ""
+        
+        //passa anotacao selecionada na lista
+        if anotacao != nil { //atualizar
+            if let textoRecuperado = anotacao.value(forKey: "texto") {
+                self.texto.text = String(describing: textoRecuperado)
+            }
+        }else{
+            self.texto.text = ""
+        }
+        
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         context = appDelegate.persistentContainer.viewContext
@@ -28,13 +38,29 @@ class AnotacaoViewController: UIViewController {
 
     
     @IBAction func salvar(_ sender: Any) {
-        self.salvarAnotacao()
-        
+        if anotacao != nil { // atualizar
+            self.atualizarAnotacao()
+        } else {
+            self.salvarAnotacao()
+        }
         
         //Retorna para a tela inicial
         self.navigationController?.popToRootViewController(animated: true)
         
         
+    }
+    
+    func atualizarAnotacao() {
+        
+        anotacao.setValue( self.texto.text, forKey: "texto")
+        anotacao.setValue( Date() , forKey: "data")
+        
+        do {
+            try context.save()
+            print("Sucesso ao atualizar anotação!")
+        } catch  let erro as Error {
+            print("Erro ao atualizar anotacao: \(erro.localizedDescription)" )
+        }
     }
     
     func salvarAnotacao () {

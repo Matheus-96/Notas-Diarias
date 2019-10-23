@@ -50,7 +50,7 @@
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="FF0-E8-NGu">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
-                                <segue destination="rCt-Dx-ICh" kind="show" id="kPU-lz-Ns6"/>
+                                <segue destination="rCt-Dx-ICh" kind="show" identifier="verAnotacao" id="kPU-lz-Ns6"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
