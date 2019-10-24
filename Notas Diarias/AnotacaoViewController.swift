@@ -58,7 +58,7 @@ class AnotacaoViewController: UIViewController {
         do {
             try context.save()
             print("Sucesso ao atualizar anotação!")
-        } catch  let erro as Error {
+        } catch  let erro {
             print("Erro ao atualizar anotacao: \(erro.localizedDescription)" )
         }
     }
@@ -74,7 +74,7 @@ class AnotacaoViewController: UIViewController {
         do {
             try context.save()
             print("Sucesso ao salvar anotação!")
-        } catch  let erro as Error {
+        } catch  let erro {
             print("Erro ao salvar anotacao: \(erro.localizedDescription)" )
         }
     }

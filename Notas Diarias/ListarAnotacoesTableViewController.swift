@@ -29,12 +29,15 @@ class ListarAnotacoesTableViewController: UITableViewController {
     func recuperarAnotacoes() {
         
         let requisicao = NSFetchRequest<NSFetchRequestResult>(entityName: "Anotacao")
+        let ordenacao = NSSortDescriptor(key: "data", ascending: false)
+        requisicao.sortDescriptors = [ordenacao]
+        
         do {
             let anotacoesRecuperadas = try context.fetch(requisicao)
             self.anotacoes = anotacoesRecuperadas as! [ NSManagedObject ]
             self.tableView.reloadData()
-        } catch let erro as Error {
-            print("Erro ao recuperar anotacoes: \(erro.localizedDescription)")
+        } catch let erro {
+            print("Erro ao recuperar anotacoes: \(erro.localizedDescription)" )
         }
         
     }
@@ -67,6 +70,30 @@ class ListarAnotacoesTableViewController: UITableViewController {
         
         return celula
     }
+    //deletar anotacoes
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
+        if editingStyle == UITableViewCell.EditingStyle.delete {
+            
+            let indice = indexPath.row
+            let anotacao = self.anotacoes[indice]
+            self.context.delete(anotacao)
+            self.anotacoes.remove(at: indice)
+            
+            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+            
+            do {
+                try self.context.save()
+            } catch let erro {
+                print("Erro ao remover item \(erro)")
+            }
+            
+        }
+        
+    }
+    
+    
+    //--------------------------------------------------------------------------------------------------------------
     
     //descobrimos qual linha foi selecionada pelo usario
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
